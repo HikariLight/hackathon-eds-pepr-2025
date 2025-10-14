@@ -17,6 +17,8 @@ TARGET_LABEL = "seance_chimio"
 
 MODEL_ID = "openai/gpt-oss-20b"
 
+NB_TRAIN= 100
+
 preds = []
 
 
@@ -25,7 +27,7 @@ df = pd.read_csv(os.path.join(DATA_PATH, data_file), sep=";")
 df_train, df_test = train_test_split(df, test_size=0.2, random_state=42)
 
 # assay
-df_train = df_train.head(100)
+df_train = df_train.head(NB_TRAIN)
 
 
 # INFERENCE
@@ -49,8 +51,8 @@ df_train["prediction"] = [1 if x == "Chemotherapy or Radiotherapy" else 0 for x 
 # # METRICS 
 true_results = df_train[TARGET_LABEL].apply(lambda x: str(x).strip())
 
-accuracy = accuracy_score(true_results, df["prediction"])
-f1 = f1_score(true_results, df["prediction"])
+accuracy = accuracy_score(true_results, df_train["prediction"])
+f1 = f1_score(true_results, df_train["prediction"])
 
 print(f"Accuracy: {accuracy:.3f}")  # 0.439
 print(f"F1 Score: {f1:.3f}")  # 0.400
