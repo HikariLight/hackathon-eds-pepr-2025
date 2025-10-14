@@ -33,3 +33,10 @@ eval.py --task task --csv_path   --sep  --pred_colname
 
 
 
+Trouver les mots clés discriminant entre radio/chimio et hospit
+Utiliser ces mots pour prédire la classe
+Ranking => donne une confiance
+
+
+
+
