@@ -45,20 +45,21 @@ outputs = pipe(
 )
 
 for answer in outputs:
-    preds.append(answer["generated_text"][-1].strip())
+    print(answer["generated_text"][-1])
+#     preds.append(answer["generated_text"][-1].strip())
 
-df_train["prediction"] = preds
+# df_train["prediction"] = preds
 
 
 
-# METRICS 
-true_results = df_train[TARGET_LABEL].apply(lambda x: str(x).strip())
+# # METRICS 
+# true_results = df_train[TARGET_LABEL].apply(lambda x: str(x).strip())
 
-accuracy = accuracy_score(true_results, df["prediction"])
-f1 = f1_score(true_results, df["prediction"])
+# accuracy = accuracy_score(true_results, df["prediction"])
+# f1 = f1_score(true_results, df["prediction"])
 
-print(f"Accuracy: {accuracy:.3f}")  # 0.439
-print(f"F1 Score: {f1:.3f}")  # 0.400
+# print(f"Accuracy: {accuracy:.3f}")  # 0.439
+# print(f"F1 Score: {f1:.3f}")  # 0.400
 
 
 
