@@ -7,7 +7,8 @@ from sklearn.metrics import accuracy_score, f1_score
 
 
 # CONFIG
-DATA_PATH = "/mnt/eds_projets/inria_hackathon/data"
+# DATA_PATH = "/mnt/eds_projets/inria_hackathon/data"
+DATA_PATH = "/home/kilian/Documents/programs/courriers_medics/kilian"
 data_file = "hackathon_train.csv"
 TARGET_LABEL = "seance_chimio"
 
@@ -31,11 +32,11 @@ pipe = pipeline(
     "text-generation",
     model=model_id,
     torch_dtype="auto",
-    device_map="cuda"
+    device_map="auto"
 )
 
 messages = [
-    {"role": "user", "content": f"I will give you a clinical note of a patient visit that was summarized by a LLM, I need you to answer me only the character \"1\" if the patient had a visit for a chemotherapy or a radiotherapy, or only \"0\" if the patient were hospitalized. Here is the medical note : \n {row["txt_rw"]}"}
+    {"role": "user", "content": f"I will give you a clinical note of a patient visit that was summarized by a LLM, I need you to answer me only the character \"1\" if the patient had a visit for a chemotherapy or a radiotherapy, or only \"0\" if the patient were hospitalized. Here is the medical note : \n {row['txt_rw']}"}
  for _, row in df_train.iterrows()]
 
 
