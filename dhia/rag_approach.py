@@ -20,7 +20,7 @@ TARGET_LABEL = "seance_chimio"
 # 1 => radio/chimio
 
 # ---- Load model
-model = SentenceTransformer(model_name)
+model = SentenceTransformer(model_name, device="cuda")
 
 # ---- Milvus setup (match docs)
 milvus_client = MilvusClient(uri="clinical_notes_vectorized.db")
@@ -50,7 +50,7 @@ train_embeddings = model.encode(
     train_df["observationBlob"].tolist(),
     convert_to_numpy=True,
     show_progress_bar=False,
-    batch_size=64,
+    batch_size=4,
 )
 
 # Normalize for IP to emulate cosine
@@ -71,7 +71,7 @@ test_embeddings = model.encode(
     test_df["observationBlob"].tolist(),
     convert_to_numpy=True,
     show_progress_bar=False,
-    batch_size=64,
+    batch_size=4,
 )
 test_embeddings = test_embeddings / (
     np.linalg.norm(test_embeddings, axis=1, keepdims=True) + 1e-12
@@ -94,15 +94,11 @@ for hits in search_res:
     winners = [k for k, v in vote.items() if v == top]
     preds.append(winners[0] if len(winners) == 1 else labels[0])
 
-test_df = test_df.copy()
-test_df[TARGET_LABEL] = preds
-
 # ---- Metrics
-y_true = test_df[TARGET_LABEL]
-y_pred = test_df[TARGET_LABEL]
+y_true = test_df[TARGET_LABEL].tolist()
 
-acc = accuracy_score(y_true, y_pred)
-f1 = f1_score(y_true, y_pred)
+acc = accuracy_score(y_true, preds)
+f1 = f1_score(y_true, preds)
 
 print(f"Accuracy:       {acc:.4f}")
 print(f"F1:     {f1:.4f}")
