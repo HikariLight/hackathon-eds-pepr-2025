@@ -29,7 +29,7 @@ TARGET_LABEL = "seance_chimio"  # ( 0 == hospitalization | 1 == radio/chimio)
 collection_name = "clinical_notes"
 
 # ---- Load model
-model = SentenceTransformer(model_name, device="cuda")
+model = SentenceTransformer(model_name)
 
 # ---- Milvus setup (match docs)
 milvus_client = MilvusClient(uri="clinical_notes_vectorized.db")
