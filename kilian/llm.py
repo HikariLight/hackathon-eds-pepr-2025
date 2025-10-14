@@ -7,8 +7,7 @@ from sklearn.metrics import accuracy_score, f1_score
 
 
 # CONFIG
-# DATA_PATH = "/mnt/eds_projets/inria_hackathon/data"
-DATA_PATH = "/home/kilian/Documents/programs/courriers_medics/kilian"
+DATA_PATH = "/mnt/eds_projets/inria_hackathon/data"
 data_file = "hackathon_train.csv"
 TARGET_LABEL = "seance_chimio"
 
