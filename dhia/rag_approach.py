@@ -50,7 +50,7 @@ train_embeddings = model.encode(
     train_df["observationBlob"].tolist(),
     convert_to_numpy=True,
     show_progress_bar=False,
-    batch_size=64,
+    batch_size=4,
 )
 
 # Normalize for IP to emulate cosine
@@ -71,7 +71,7 @@ test_embeddings = model.encode(
     test_df["observationBlob"].tolist(),
     convert_to_numpy=True,
     show_progress_bar=False,
-    batch_size=1,
+    batch_size=4,
 )
 test_embeddings = test_embeddings / (
     np.linalg.norm(test_embeddings, axis=1, keepdims=True) + 1e-12
