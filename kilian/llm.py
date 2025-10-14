@@ -31,11 +31,11 @@ pipe = pipeline(
     "text-generation",
     model=model_id,
     torch_dtype="auto",
-    device_map="cuda"
+    device_map="auto"
 )
 
 messages = [
-    {"role": "user", "content": f"I will give you a clinical note of a patient visit that was summarized by a LLM, I need you to answer me only the character \"1\" if the patient had a visit for a chemotherapy or a radiotherapy, or only \"0\" if the patient were hospitalized. Here is the medical note : \n {df_train[row, "txt_rw"]}"}
+    {"role": "user", "content": f"I will give you a clinical note of a patient visit that was summarized by a LLM, I need you to answer me only the character \"1\" if the patient had a visit for a chemotherapy or a radiotherapy, or only \"0\" if the patient were hospitalized. Here is the medical note : \n {row['txt_rw']}"}
  for _, row in df_train.iterrows()]
 
 
@@ -45,20 +45,21 @@ outputs = pipe(
 )
 
 for answer in outputs:
-    preds.append(answer["generated_text"][-1].strip())
+    print(answer["generated_text"][-1])
+#     preds.append(answer["generated_text"][-1].strip())
 
-df_train["prediction"] = preds
+# df_train["prediction"] = preds
 
 
 
-# METRICS 
-true_results = df_train[TARGET_LABEL].apply(lambda x: str(x).strip())
+# # METRICS 
+# true_results = df_train[TARGET_LABEL].apply(lambda x: str(x).strip())
 
-accuracy = accuracy_score(true_results, df["prediction"])
-f1 = f1_score(true_results, df["prediction"])
+# accuracy = accuracy_score(true_results, df["prediction"])
+# f1 = f1_score(true_results, df["prediction"])
 
-print(f"Accuracy: {accuracy:.3f}")  # 0.439
-print(f"F1 Score: {f1:.3f}")  # 0.400
+# print(f"Accuracy: {accuracy:.3f}")  # 0.439
+# print(f"F1 Score: {f1:.3f}")  # 0.400
 
 
 
