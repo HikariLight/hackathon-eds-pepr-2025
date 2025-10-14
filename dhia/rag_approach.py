@@ -43,6 +43,8 @@ train_df, test_df = train_test_split(
     df, test_size=0.2, random_state=42, stratify=df[TARGET_LABEL]
 )
 
+train_df = train_df.iloc[:2000].reset_index(drop=True)
+
 # ---- Index data
 train_embeddings = model.encode(
     train_df["observationBlob"].tolist(),
