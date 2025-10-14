@@ -49,7 +49,7 @@ df_train["prediction"] = [1 if x == "Chemotherapy or Radiotherapy" else 0 for x 
 
 
 # # METRICS 
-true_results = df_train[TARGET_LABEL].apply(lambda x: str(x).strip())
+true_results = df_train[TARGET_LABEL].apply(lambda x: int(x))
 
 accuracy = accuracy_score(true_results, df_train["prediction"])
 f1 = f1_score(true_results, df_train["prediction"])
