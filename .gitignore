@@ -1,4 +1,5 @@
 venv/
+misc/
 *.sh
 
 .DS_Store
