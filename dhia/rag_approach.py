@@ -20,7 +20,7 @@ TARGET_LABEL = "seance_chimio"
 # 1 => radio/chimio
 
 # ---- Load model
-model = SentenceTransformer(model_name)
+model = SentenceTransformer(model_name, device="cuda")
 
 # ---- Milvus setup (match docs)
 milvus_client = MilvusClient(uri="clinical_notes_vectorized.db")
