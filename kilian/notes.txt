@@ -1,0 +1,35 @@
+DOnnées à traiter: texte brut de courrier médical
+Résumé via LLM dispo (~= 250 mots)
+
+Objectifs (classé par difficulté):
+- Classification Chimio-Radio vs Hospitalisation => F1 score à.85
+- Classification cancer poumon (c34) vs autres cas
+- Classification binaire .9 (correspond à un cancer mal défini) vs autres cas (voir si vrai .9 ou .9 flemme )
+- Classification multi-classe avec les sous classes du chapitre 2
+- Classification avec le top 40/50/60 des sous classes du ch.2 => F1 score à 0.7
+
+Réussir à classer c78 et c79 (classes plus difficiles)
+
+
+
+Infos:
+Colonne observationBlob pour le texte brut
+Colonne txt_rw pour le résumé LLM
+
+Train : 2020-2023
+Test : 2024
+
+OBlig:
+- Ne pas regarder un document (print, log...)
+
+
+
+Data
+- hackaton_train.csv
+- hackaton_inference.csv 
+
+eval.py --task task --csv_path   --sep  --pred_colname
+
+
+
+
