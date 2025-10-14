@@ -1,4 +1,4 @@
-import pandas
+import pandas as pd
 import numpy as np
 from sklearn.metrics import accuracy_score, f1_score
 import os
@@ -49,7 +49,7 @@ def get_likeliehood(text: str, dictionary: List[str]) -> int:
 
 
 # ---- Data loading
-df = pandas.read_csv(os.path.join(DATA_PATH, data_file), sep=";")
+df = pd.read_csv(os.path.join(DATA_PATH, data_file), sep=";")
 
 # ---- Inference
 df["likeliehood_hospitalization"] = df["observationBlob"].apply(
