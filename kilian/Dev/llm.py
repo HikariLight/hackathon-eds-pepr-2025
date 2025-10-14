@@ -2,7 +2,8 @@ from transformers import pipeline
 import torch
 import pandas as pd
 import os
-from sklearn.model_selection import train_test_split 
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, f1_score
 
 
 # CONFIG
@@ -18,8 +19,8 @@ df = pd.read_csv(os.path.join(DATA_PATH, data_file), sep=";")
 df_train, df_test = train_test_split(df, test_size=0.2, random_state=42)
 
 # used for assay
-df_test = df_test.head(10)
-df_train = df_train.head(3)
+df_test = df_test.head(5)
+df_train = df_train.head(10)
 
 
 # INFERENCE
@@ -31,11 +32,29 @@ pipe = pipeline(
 )
 
 messages = [
-    {"role": "user", "content": "I will give you a medical clinical note of a patient visit that has been summed up by a LLM, I need you to answer me \"1\" if the patient had a visit for a chemotherapy or a radiotherapy, or \"0\" if the patient were hospitalized. Here is the medical note : \n" + df_train[0, "txt_rw"]},
-]
+    {"role": "user", "content": "I will give you a clinical note of a patient visit that was summarized by a LLM, I need you to answer me only the character \"1\" if the patient had a visit for a chemotherapy or a radiotherapy, or only \"0\" if the patient were hospitalized. Here is the medical note : \n" + df_train[row, "txt_rw"]}
+ for row in df_train.iterrows()]
+
+
+true_results = [str(df_train[row, TARGET_LABEL]) for row in df_train.iterrows()]
 
 outputs = pipe(
     messages,
     max_new_tokens=256,
 )
-print(outputs[0]["generated_text"][-1])
+
+preds = []
+for answer in outputs:
+    preds.append(answer["generated_text"][-1].strip())
+
+df_train["prediction"] = preds
+
+accuracy = accuracy_score(df[TARGET_LABEL], df["prediction"])
+f1 = f1_score(df[TARGET_LABEL], df["prediction"])
+
+print(f"Accuracy: {accuracy:.3f}")  # 0.439
+print(f"F1 Score: {f1:.3f}")  # 0.400
+
+
+
+
