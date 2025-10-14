@@ -11,6 +11,8 @@ import os
 model_name = "Qwen/Qwen3-Embedding-0.6B"
 
 BATCH_SIZE = 8
+N_EXAMPLES = 1000
+TOP_K = 3
 
 DATA_PATH = "/mnt/eds_projets/inria_hackathon/data"
 data_file = "hackathon_train.csv"
@@ -42,7 +44,7 @@ train_df, test_df = train_test_split(
     df, test_size=0.2, random_state=42, stratify=df[TARGET_LABEL]
 )
 
-train_df = train_df.iloc[:2000].reset_index(drop=True)
+train_df = train_df.iloc[:N_EXAMPLES].reset_index(drop=True)
 
 # ---- Index data
 train_embeddings = model.encode(
@@ -83,7 +85,7 @@ test_embeddings = test_embeddings / (
 search_res = milvus_client.search(
     collection_name=collection_name,
     data=test_embeddings,  # batch query
-    limit=3,
+    limit=TOP_K,
     search_params={"metric_type": "IP", "params": {}},
     output_fields=["label"],
 )
