@@ -59,7 +59,11 @@ train_embeddings = train_embeddings / (
 )
 
 data = [
-    {"id": int(i), "vector": vec.tolist(), "label": row[TARGET_LABEL]}
+    {
+        "id": int(i),
+        "vector": vec.tolist(),
+        "label": getattr(row, TARGET_LABEL),
+    }
     for i, (vec, row) in enumerate(
         zip(train_embeddings, train_df.itertuples(index=False))
     )
