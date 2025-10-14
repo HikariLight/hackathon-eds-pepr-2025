@@ -35,7 +35,7 @@ pipe = pipeline(
 )
 
 messages = [
-    {"role": "user", "content": f"I will give you a clinical note of a patient visit that was summarized by a LLM, I need you to answer me only the character \"1\" if the patient had a visit for a chemotherapy or a radiotherapy, or only \"0\" if the patient were hospitalized. Here is the medical note : \n {df_train[row, "txt_rw"]}"}
+    {"role": "user", "content": f"I will give you a clinical note of a patient visit that was summarized by a LLM, I need you to answer me only the character \"1\" if the patient had a visit for a chemotherapy or a radiotherapy, or only \"0\" if the patient were hospitalized. Here is the medical note : \n {row["txt_rw"]}"}
  for _, row in df_train.iterrows()]
 
 
