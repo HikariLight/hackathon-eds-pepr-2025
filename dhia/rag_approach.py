@@ -6,13 +6,21 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, f1_score
 from collections import Counter
 import os
+import argparse
+
+# ---- Parameter parsing
+parser = argparse.ArgumentParser()
+parser.add_argument("--batch_size", type=int, default=4)
+parser.add_argument("--n_examples", type=int, default=1000)
+parser.add_argument("--top_k", type=int, default=1000)
+args = parser.parse_args()
 
 # CONFIG
 model_name = "Qwen/Qwen3-Embedding-0.6B"
 
-BATCH_SIZE = 8
-N_EXAMPLES = 1000
-TOP_K = 3
+BATCH_SIZE = args.batch_size
+N_EXAMPLES = args.n_examples
+TOP_K = args.top_k
 
 DATA_PATH = "/mnt/eds_projets/inria_hackathon/data"
 data_file = "hackathon_train.csv"
