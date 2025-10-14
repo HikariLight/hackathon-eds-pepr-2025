@@ -6,18 +6,17 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, f1_score
 from collections import Counter
 import os
-from typing import List
 
 # CONFIG
 model_name = "Qwen/Qwen3-Embedding-0.6B"
 
-collection_name = "clinical_notes"
+BATCH_SIZE = 8
 
 DATA_PATH = "/mnt/eds_projets/inria_hackathon/data"
 data_file = "hackathon_train.csv"
-TARGET_LABEL = "seance_chimio"
-# 0 => hospitalization
-# 1 => radio/chimio
+TARGET_LABEL = "seance_chimio"  # ( 0 == hospitalization | 1 == radio/chimio)
+
+collection_name = "clinical_notes"
 
 # ---- Load model
 model = SentenceTransformer(model_name, device="cuda")
@@ -50,7 +49,7 @@ train_embeddings = model.encode(
     train_df["observationBlob"].tolist(),
     convert_to_numpy=True,
     show_progress_bar=False,
-    batch_size=4,
+    batch_size=BATCH_SIZE,
 )
 
 # Normalize for IP to emulate cosine
@@ -59,7 +58,11 @@ train_embeddings = train_embeddings / (
 )
 
 data = [
-    {"id": int(i), "vector": vec.tolist(), "label": row[TARGET_LABEL]}
+    {
+        "id": int(i),
+        "vector": vec.tolist(),
+        "label": getattr(row, TARGET_LABEL),
+    }
     for i, (vec, row) in enumerate(
         zip(train_embeddings, train_df.itertuples(index=False))
     )
@@ -71,7 +74,7 @@ test_embeddings = model.encode(
     test_df["observationBlob"].tolist(),
     convert_to_numpy=True,
     show_progress_bar=False,
-    batch_size=4,
+    batch_size=BATCH_SIZE,
 )
 test_embeddings = test_embeddings / (
     np.linalg.norm(test_embeddings, axis=1, keepdims=True) + 1e-12
