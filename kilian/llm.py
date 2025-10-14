@@ -1,9 +1,13 @@
-from transformers import pipeline
 import torch
 import pandas as pd
 import os
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, f1_score
+import outlines
+from transformers import AutoTokenizer, AutoModelForCausalLM
+from typing import Literal
+
+
 
 
 # CONFIG
@@ -11,7 +15,7 @@ DATA_PATH = "/mnt/eds_projets/inria_hackathon/data"
 data_file = "hackathon_train.csv"
 TARGET_LABEL = "seance_chimio"
 
-model_id = "openai/gpt-oss-20b"
+MODEL_ID = "openai/gpt-oss-20b"
 
 chuck_size = 50
 preds = []
@@ -25,27 +29,50 @@ df_train, df_test = train_test_split(df, test_size=0.2, random_state=42)
 df_train = df_train.head(10)
 
 
-
 # INFERENCE
-pipe = pipeline(
-    "text-generation",
-    model=model_id,
-    torch_dtype="auto",
-    device_map="auto"
+
+model = outlines.from_transformers(
+    AutoModelForCausalLM.from_pretrained(MODEL_ID, device_map="auto"),
+    AutoTokenizer.from_pretrained(MODEL_ID)
 )
 
-messages = [
-    {"role": "user", "content": f"I will give you a clinical note of a patient visit that was summarized by a LLM, I need you to answer me only the character \"1\" if the patient had a visit for a chemotherapy or a radiotherapy, or only \"0\" if the patient were hospitalized. Here is the medical note : \n {row['txt_rw']}"}
- for _, row in df_train.iterrows()]
-
-
-outputs = pipe(
-    messages,
-    max_new_tokens=256,
+# Simple classification
+prediction = model(
+    f"Using the following note medical note, can you tell me if the patient came for a chemo or radiotherapy or if the patient were hospitalized :\n {df_train["txt_rw"].iloc[0]}",
+    Literal["Chemotherapy or Radiotherapy", "Hopitalization"]
 )
+print(prediction)
 
-for answer in outputs:
-    print(answer["generated_text"][-1])
+
+
+
+
+
+
+
+
+
+
+
+# pipe = pipeline(
+#     "text-generation",
+#     model=model_id,
+#     torch_dtype="auto",
+#     device_map="auto"
+# )
+
+# messages = [
+#     {"role": "user", "content": f"I will give you a clinical note of a patient visit that was summarized by a LLM, I need you to answer me only the character \"1\" if the patient had a visit for a chemotherapy or a radiotherapy, or only \"0\" if the patient were hospitalized. Here is the medical note : \n {row['txt_rw']}"}
+#  for _, row in df_train.iterrows()]
+
+
+# outputs = pipe(
+#     messages,
+#     max_new_tokens=256,
+# )
+
+# for answer in outputs:
+#     print(answer["generated_text"][-1])
 #     preds.append(answer["generated_text"][-1].strip())
 
 # df_train["prediction"] = preds
