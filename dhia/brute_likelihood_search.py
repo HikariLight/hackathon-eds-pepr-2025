@@ -11,6 +11,9 @@ TARGET_LABEL = "seance_chimio"
 # 0 => hospitalization
 # 1 => radio/chimio
 
+# ---
+# F1 Score:
+# ---
 
 hospitalization_keywords = [
     "hospitalisation",
@@ -65,5 +68,5 @@ df["prediction"] = np.where(
 accuracy = accuracy_score(df[TARGET_LABEL], df["prediction"])
 f1 = f1_score(df[TARGET_LABEL], df["prediction"])
 
-print(f"Accuracy: {accuracy:.3f}")
-print(f"F1 Score: {f1:.3f}")
+print(f"Accuracy: {accuracy:.3f}")  # 0.439
+print(f"F1 Score: {f1:.3f}")  # 0.400
