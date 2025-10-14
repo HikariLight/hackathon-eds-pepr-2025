@@ -1,4 +1,7 @@
+--extra-index-url https://download.pytorch.org/whl/cu126
 scikit-learn
-medkit
+medkit-lib
 datasets
+pytorch==2.8.0
 pandas
+transformers
