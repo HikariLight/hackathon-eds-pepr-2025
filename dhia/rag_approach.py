@@ -16,7 +16,15 @@ parser.add_argument("--top_k", type=int, default=1000)
 parser.add_argument(
     "--target_label",
     type=str,
-    choices=["seance_chimio"],
+    choices=[
+        "seance_chimio",
+        "is_top_40",
+        "is_top_50",
+        "is_top_60",
+        "class_group",
+        "precision",
+        "cancer_poumon",
+    ],
     default="seance_chimio",
     required=True,
     help="Mode of operation: train, eval, or test",
