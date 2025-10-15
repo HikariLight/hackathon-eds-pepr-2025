@@ -59,11 +59,12 @@ collection_name = "clinical_observations"
 
 # Probe embedding dim once
 embedding_dim = len(model.encode("probe"))
+print(" > Embedding dimension: ", embedding_dim)
 
 if not milvus_client.has_collection(collection_name):
     milvus_client.create_collection(
         collection_name=collection_name,
-        dimension=embedding_dim,
+        dimension=768,
         metric_type="IP",
         consistency_level="Bounded",
     )
