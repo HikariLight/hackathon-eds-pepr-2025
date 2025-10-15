@@ -15,23 +15,6 @@ login()
 parser = argparse.ArgumentParser()
 parser.add_argument("--batch_size", type=int, default=4)
 parser.add_argument("--n_examples", type=int, default=1000)
-parser.add_argument("--top_k", type=int, default=1000)
-parser.add_argument(
-    "--target_label",
-    type=str,
-    choices=[
-        "seance_chimio",
-        "is_top_40",
-        "is_top_50",
-        "is_top_60",
-        "class_group",
-        "precision",
-        "cancer_poumon",
-    ],
-    default="seance_chimio",
-    required=True,
-    help="Mode of operation: train, eval, or test",
-)
 args = parser.parse_args()
 
 # CONFIG
@@ -39,7 +22,6 @@ model_name = "google/embeddinggemma-300m"
 
 BATCH_SIZE = args.batch_size
 N_EXAMPLES = args.n_examples
-TOP_K = args.top_k
 
 DATA_PATH = "/mnt/eds_projets/inria_hackathon/data"
 data_file = "hackathon_train.csv"
@@ -91,8 +73,6 @@ data = [
         "vector": vec.tolist(),
         **{label: getattr(row, label) for label in labels},
     }
-    for i, (vec, row) in enumerate(
-        zip(embeddings, df.itertuples(index=False))  # Corrected variable names
-    )
+    for i, (vec, row) in enumerate(zip(embeddings, df.itertuples(index=False)))
 ]
 milvus_client.insert(collection_name=collection_name, data=data)
