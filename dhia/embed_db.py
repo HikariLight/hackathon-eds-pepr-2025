@@ -9,7 +9,8 @@ import argparse
 
 # Logging into huggingface to access gated models
 load_dotenv()
-login()
+login(token=os.getenv("HUGGINGFACE_HUB_TOKEN"))
+
 
 # ---- Parameter parsing
 parser = argparse.ArgumentParser()
