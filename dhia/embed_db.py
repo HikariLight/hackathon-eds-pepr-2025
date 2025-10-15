@@ -9,7 +9,8 @@ import argparse
 
 # Logging into huggingface to access gated models
 load_dotenv()
-login()
+login(token=os.getenv("HUGGINGFACE_HUB_TOKEN"))
+
 
 # ---- Parameter parsing
 parser = argparse.ArgumentParser()
@@ -54,6 +55,10 @@ if not milvus_client.has_collection(collection_name):
 
 # ---- Data
 df = pd.read_csv(os.path.join(DATA_PATH, data_file), sep=";")
+print(f" > Full dataset contains {len(df)} examples.")
+
+print(f" > Selecting the first {N_EXAMPLES} examples for embedding.")
+df = df.head(N_EXAMPLES).copy()
 
 
 # ---- Index data
