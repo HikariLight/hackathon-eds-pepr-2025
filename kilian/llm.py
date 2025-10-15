@@ -68,7 +68,7 @@ CLINICAL NOTE
 
 for _, row in df_train.iterrows():
     prediction = model(
-        prompt.replace("EXAMPLES", few_shot_str).replace("CLINICAL NOTE", row["txt_rw"]),
+        prompt.replace("EXAMPLES", few_shot_str).replace("CLINICAL NOTE", str(row["txt_rw"])),
         Literal["Chemotherapy or Radiotherapy", "Hopitalization"],
     )
     preds.append(prediction)
