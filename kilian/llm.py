@@ -50,17 +50,25 @@ for _, row in hospit_few.iterrows():
 for _, row in chemo_few.iterrows():
     few_shot_str += template.replace("%n", str(row["txt_rw"])).replace("%r", "Chemotherapy or Radiotherapy")
 
-few_shot_prompt = (
-    f"""Here is a few medical notes with the result if the patient recieved a chemotherapy or a radiotherapy treatment or if the patient was only hospitalized. I want you to learn how to extract this information from the medical notes and reproduce it on later notes.
-Here are the few notes for you to learn:"""
-    + few_shot_str
-)
+prompt = """
+You are a medical assistant at a hospital. Your job is to verify whether a person came into the hospital for a hospitaization, or a radiotherapy/chemotherapy treatment. Read the example clinical note very carefully and decide whether the patient was hospitalized or administered treatment.
+
+Here are some examples to help you:
+
+EXAMPLES
+
+Here is the clinical note to classify:
+
+CLINICAL NOTE
+
+"""
+
+
 
 
 for _, row in df_train.iterrows():
     prediction = model(
-        f"""{few_shot_prompt}
-        Now on the following medical note, can you tell me if the patient had a chemotherapy or a radiotherapy or if the patient was only hospitalized :\n {row["txt_rw"]}""",
+        prompt.replace("EXAMPLES", few_shot_str).replace("CLINICAL NOTE", row["txt_rw"]),
         Literal["Chemotherapy or Radiotherapy", "Hopitalization"],
     )
     preds.append(prediction)
