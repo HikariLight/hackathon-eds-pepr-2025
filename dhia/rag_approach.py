@@ -13,10 +13,18 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--batch_size", type=int, default=4)
 parser.add_argument("--n_examples", type=int, default=1000)
 parser.add_argument("--top_k", type=int, default=1000)
+parser.add_argument(
+    "--target_label",
+    type=str,
+    choices=["seance_chimio"],
+    default="seance_chimio",
+    required=True,
+    help="Mode of operation: train, eval, or test",
+)
 args = parser.parse_args()
 
 # CONFIG
-model_name = "Qwen/Qwen3-Embedding-0.6B"
+model_name = "google/embeddinggemma-300m"
 
 BATCH_SIZE = args.batch_size
 N_EXAMPLES = args.n_examples
@@ -24,7 +32,7 @@ TOP_K = args.top_k
 
 DATA_PATH = "/mnt/eds_projets/inria_hackathon/data"
 data_file = "hackathon_train.csv"
-TARGET_LABEL = "seance_chimio"  # ( 0 == hospitalization | 1 == radio/chimio)
+TARGET_LABEL = args.target_label  # ( 0 == hospitalization | 1 == radio/chimio)
 
 collection_name = "clinical_notes"
 
