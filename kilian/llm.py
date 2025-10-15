@@ -26,8 +26,8 @@ df_train = pd.read_csv(os.path.join(DATA_PATH, data_file), sep=";")
 # df_train, df_test = train_test_split(df, test_size=0.2, random_state=42)
 
 # assay
-hospit_few = df_train[df_train[TARGET_LABEL] == 0].head(2)
-chemo_few = df_train[df_train[TARGET_LABEL] == 1].head(2)
+hospit_few = df_train[df_train[TARGET_LABEL] == 0].head(1)
+chemo_few = df_train[df_train[TARGET_LABEL] == 1].head(1)
 
 df_train = df_train.head(NB_TRAIN)
 
