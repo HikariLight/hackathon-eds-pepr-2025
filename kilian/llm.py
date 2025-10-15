@@ -10,7 +10,7 @@ from typing import Literal
 
 # CONFIG
 DATA_PATH = "/mnt/eds_projets/inria_hackathon/data"
-# DATA_PATH = "/home/kilian/Documents/programs/courriers_medics/kilian"
+
 data_file = "hackathon_train.csv"
 TARGET_LABEL = "seance_chimio"
 
@@ -51,12 +51,6 @@ for _, row in chemo_few.iterrows():
     few_shot_str += template.replace("%n", str(row["txt_rw"])).replace("%r", "Chemotherapy or Radiotherapy")
 
 
-# Read the example clinical note very carefully and decide whether the patient was hospitalized or administered treatment.
-
-# Here are some examples to help you:
-
-# EXAMPLES
-
 prompt = """
 You are a medical assistant at a hospital. Your job is to verify whether a person came into the hospital for a hospitaization, or a radiotherapy/chemotherapy treatment.
 Here is the clinical note to classify:
@@ -70,7 +64,7 @@ CLINICAL NOTE
 
 for _, row in df_train.iterrows():
     prediction = model(
-        prompt.replace("CLINICAL NOTE", str(row["txt_rw"])),
+        prompt.replace("CLINICAL NOTE", str(row["observationBlob"])),
         Literal["Chemotherapy or Radiotherapy", "Hopitalization"],
     )
     preds.append(prediction)
