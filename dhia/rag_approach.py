@@ -5,8 +5,12 @@ from pymilvus import MilvusClient
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, f1_score
 from collections import Counter
+from huggingface_hub import login
 import os
 import argparse
+
+# Logging into huggingface to access gated models
+login()
 
 # ---- Parameter parsing
 parser = argparse.ArgumentParser()
