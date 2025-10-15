@@ -26,8 +26,8 @@ df_train = pd.read_csv(os.path.join(DATA_PATH, data_file), sep=";")
 # df_train, df_test = train_test_split(df, test_size=0.2, random_state=42)
 
 # assay
-hospit_few = df_train[df_train[TARGET_LABEL] == 0].head(2)
-chemo_few = df_train[df_train[TARGET_LABEL] == 1].head(2)
+hospit_few = df_train[df_train[TARGET_LABEL] == 0].head(1)
+chemo_few = df_train[df_train[TARGET_LABEL] == 1].head(1)
 
 df_train = df_train.head(NB_TRAIN)
 
@@ -46,12 +46,12 @@ Result: %r"""
 few_shot_str = ""
 
 for _, row in hospit_few.iterrows():
-    few_shot_str += template.replace("%n", row["txt_rw"]).replace("%r", "0")
+    few_shot_str += template.replace("%n", str(row["txt_rw"])).replace("%r", "Hopitalization")
 for _, row in chemo_few.iterrows():
-    few_shot_str += template.replace("%n", row["txt_rw"]).replace("%r", "1")
+    few_shot_str += template.replace("%n", str(row["txt_rw"])).replace("%r", "Chemotherapy or Radiotherapy")
 
 few_shot_prompt = (
-    f"""Here is a few medical notes with an information about if the patient recieved a chemotherapy or a radiotherapy treatment or if the patient was only hospitalized. I want you to learn how to extract this information from the medical notes and reproduce it on later notes.
+    f"""Here is a few medical notes with the result if the patient recieved a chemotherapy or a radiotherapy treatment or if the patient was only hospitalized. I want you to learn how to extract this information from the medical notes and reproduce it on later notes.
 Here are the few notes for you to learn:"""
     + few_shot_str
 )
