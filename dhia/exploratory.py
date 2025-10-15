@@ -8,4 +8,6 @@ TARGET_LABEL = "seance_chimio"
 
 df = pd.read_csv(os.path.join(DATA_PATH, data_file), sep=";")
 
+print(df.columns)
+
 print(df["class_group"].value_counts())
