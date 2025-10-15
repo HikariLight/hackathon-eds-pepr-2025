@@ -8,17 +8,15 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 from typing import Literal
 
 
-
-
 # CONFIG
-# DATA_PATH = "/mnt/eds_projets/inria_hackathon/data"
-DATA_PATH = "/home/kilian/Documents/programs/courriers_medics/kilian"
+DATA_PATH = "/mnt/eds_projets/inria_hackathon/data"
+# DATA_PATH = "/home/kilian/Documents/programs/courriers_medics/kilian"
 data_file = "hackathon_train.csv"
 TARGET_LABEL = "seance_chimio"
 
 MODEL_ID = "openai/gpt-oss-20b"
 
-NB_TRAIN= 100
+NB_TRAIN = 100
 
 preds = []
 
@@ -38,7 +36,7 @@ df_train = df_train.head(NB_TRAIN)
 
 model = outlines.from_transformers(
     AutoModelForCausalLM.from_pretrained(MODEL_ID, device_map="auto"),
-    AutoTokenizer.from_pretrained(MODEL_ID)
+    AutoTokenizer.from_pretrained(MODEL_ID),
 )
 
 template = """---
@@ -52,26 +50,27 @@ for _, row in hospit_few.iterrows():
 for _, row in chemo_few.iterrows():
     few_shot_str += template.replace("%n", row["txt_rw"]).replace("%r", "1")
 
-few_shot_prompt = f"""Here is a few medical notes with an information about if the patient recieved a chemotherapy or a radiotherapy treatment or if the patient was only hospitalized. I want you to learn how to extract this information from the medical notes and reproduce it on later notes.
-Here are the few notes for you to learn:""" + few_shot_str
-
-
-
+few_shot_prompt = (
+    f"""Here is a few medical notes with an information about if the patient recieved a chemotherapy or a radiotherapy treatment or if the patient was only hospitalized. I want you to learn how to extract this information from the medical notes and reproduce it on later notes.
+Here are the few notes for you to learn:"""
+    + few_shot_str
+)
 
 
 for _, row in df_train.iterrows():
     prediction = model(
         f"""{few_shot_prompt}
         Now on the following medical note, can you tell me if the patient had a chemotherapy or a radiotherapy or if the patient was only hospitalized :\n {row["txt_rw"]}""",
-        Literal["Chemotherapy or Radiotherapy", "Hopitalization"]
+        Literal["Chemotherapy or Radiotherapy", "Hopitalization"],
     )
     preds.append(prediction)
 
-df_train["prediction"] = [1 if x == "Chemotherapy or Radiotherapy" else 0 for x in preds]
+df_train["prediction"] = [
+    1 if x == "Chemotherapy or Radiotherapy" else 0 for x in preds
+]
 
 
-
-# METRICS 
+# METRICS
 true_results = df_train[TARGET_LABEL].apply(lambda x: int(x))
 
 accuracy = accuracy_score(true_results, df_train["prediction"])
@@ -79,16 +78,6 @@ f1 = f1_score(true_results, df_train["prediction"])
 
 print(f"Accuracy: {accuracy:.3f}")  # 0.439
 print(f"F1 Score: {f1:.3f}")  # 0.400
-
-
-
-
-
-
-
-
-
-
 
 
 # pipe = pipeline(
@@ -113,11 +102,3 @@ print(f"F1 Score: {f1:.3f}")  # 0.400
 #     preds.append(answer["generated_text"][-1].strip())
 
 # df_train["prediction"] = preds
-
-
-
-
-
-
-
-
