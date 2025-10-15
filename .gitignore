@@ -5,3 +5,4 @@ misc/
 .DS_Store
 *.db
 *.db.lock
+.env

@@ -10,3 +10,4 @@ sentence-transformers
 accelerate
 outlines
 huggingface_hub
+python-dotenv

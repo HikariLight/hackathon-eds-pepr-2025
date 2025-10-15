@@ -7,9 +7,11 @@ from sklearn.metrics import accuracy_score, f1_score
 from collections import Counter
 from huggingface_hub import login
 import os
+from dotenv import load_dotenv
 import argparse
 
 # Logging into huggingface to access gated models
+load_dotenv()
 login()
 
 # ---- Parameter parsing
@@ -78,7 +80,7 @@ train_df = train_df.iloc[:N_EXAMPLES].reset_index(drop=True)
 train_embeddings = model.encode(
     train_df["observationBlob"].tolist(),
     convert_to_numpy=True,
-    show_progress_bar=False,
+    show_progress_bar=True,
     batch_size=BATCH_SIZE,
 )
 
@@ -103,7 +105,7 @@ milvus_client.insert(collection_name=collection_name, data=data)
 test_embeddings = model.encode(
     test_df["observationBlob"].tolist(),
     convert_to_numpy=True,
-    show_progress_bar=False,
+    show_progress_bar=True,
     batch_size=BATCH_SIZE,
 )
 test_embeddings = test_embeddings / (
