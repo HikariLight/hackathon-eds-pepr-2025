@@ -1,13 +1,22 @@
 import pandas as pd
 import os
+from dotenv import load_dotenv
 
-# CONFIG
-DATA_PATH = "/mnt/eds_projets/inria_hackathon/data"
-data_file = "hackathon_train.csv"
-TARGET_LABEL = "seance_chimio"
+load_dotenv()
 
-df = pd.read_csv(os.path.join(DATA_PATH, data_file), sep=";")
+for key, value in os.environ.items():
+    print(f"{key}: {value}")
 
-print(df.columns)
+api_key = os.getenv("HUGGINGFACE_HUB_TOKEN")
+print(api_key)
 
-print(df["class_group"].value_counts())
+# # CONFIG
+# DATA_PATH = "/mnt/eds_projets/inria_hackathon/data"
+# data_file = "hackathon_train.csv"
+# TARGET_LABEL = "seance_chimio"
+
+# df = pd.read_csv(os.path.join(DATA_PATH, data_file), sep=";")
+
+# print(df.columns)
+
+# print(df["class_group"].value_counts())
