@@ -47,7 +47,7 @@ model = SentenceTransformer(model_name)
 # ---- Milvus setup (match docs)
 milvus_client = MilvusClient(uri="clinical_notes.db")
 
-collection_name = "clinical_notes"
+collection_name = "clinical_observations"
 
 
 if not milvus_client.has_collection(collection_name):
